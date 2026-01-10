@@ -15,6 +15,7 @@ description: |
  It's highly extensible with a plugin system and includes FooScript, a scripting language for advanced configuration of widgets.
 grade: stable
 confinement: strict
+icon: org.fooyin.fooyin.svg
 
 apps:
   fooyin:
@@ -23,8 +24,8 @@ apps:
     common-id: org.fooyin.fooyin
     environment:
       QT_QPA_PLATFORMTHEME: xdgdesktopportal
-      LD_LIBRARY_PATH: $SNAP/lxqt-support/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR:$LD_LIBRARY_PATH
-      QT_PLUGIN_PATH: $SNAP/lxqt-support/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/qt6/plugins:$QT_PLUGIN_PATH
+      LD_LIBRARY_PATH: $SNAP/lxqt-support-core24/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR:$LD_LIBRARY_PATH
+      QT_PLUGIN_PATH: $SNAP/lxqt-support-core24/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/qt6/plugins:$QT_PLUGIN_PATH
     extensions: [kde-neon-6]
     plugs:
       - home
@@ -36,17 +37,17 @@ apps:
 plugs:
   shared-memory:
     private: true
-  lxqt-support:
-    content: lxqt-support
+  lxqt-support-core24:
+    content: lxqt-support-core24
     interface: content
-    target: $SNAP/lxqt-support
-    default-provider: lxqt-support
+    target: $SNAP/lxqt-support-core24
+    default-provider: lxqt-support-core24
 
 layout:
   /usr/share/color-schemes:
-    symlink: $SNAP/lxqt-support/usr/share/color-schemes
+    symlink: $SNAP/lxqt-support-core24/usr/share/color-schemes
   /usr/share/Kvantum:
-    symlink: $SNAP/lxqt-support/usr/share/Kvantum
+    symlink: $SNAP/lxqt-support-core24/usr/share/Kvantum
   /usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/alsa-lib:
     symlink: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/alsa-lib
 
@@ -73,9 +74,6 @@ parts:
     override-build: |
       craftctl default
       sed -i 's|Name=fooyin|Name=fooyin [NyKyu]|' $CRAFT_PART_INSTALL/usr/share/applications/org.fooyin.fooyin.desktop
-      sed -i 's|Exec=fooyin %F|Exec=${SNAP}/usr/bin/fooyin %F|' $CRAFT_PART_INSTALL/usr/share/applications/org.fooyin.fooyin.desktop
-      sed -i 's|TryExec=fooyin|TryExec=${SNAP}/usr/bin/fooyin|' $CRAFT_PART_INSTALL/usr/share/applications/org.fooyin.fooyin.desktop
-      sed -i 's|Icon=org.fooyin.fooyin|Icon=${SNAP}/usr/share/icons/hicolor/scalable/apps/org.fooyin.fooyin.svg|' $CRAFT_PART_INSTALL/usr/share/applications/org.fooyin.fooyin.desktop
 
   base-dependencies:
     after: [fooyin-app]
