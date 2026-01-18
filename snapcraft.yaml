@@ -73,7 +73,7 @@ parts:
       - -DCMAKE_INSTALL_PREFIX=/usr
     override-build: |
       craftctl default
-      sed -i 's|Name=fooyin|Name=fooyin [NyKyu]|' $CRAFT_PART_INSTALL/usr/share/applications/org.fooyin.fooyin.desktop
+      sed -i 's|Name=fooyin|Name=fooyin [Kyu]|' $CRAFT_PART_INSTALL/usr/share/applications/org.fooyin.fooyin.desktop
 
   base-dependencies:
     after: [fooyin-app]
