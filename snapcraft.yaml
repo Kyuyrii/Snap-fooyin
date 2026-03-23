@@ -31,8 +31,7 @@ apps:
       - home
       - removable-media
       - mount-observe
-    slots:
-      - mpris
+      - udisks2
 
 plugs:
   shared-memory:
