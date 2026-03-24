@@ -48,16 +48,8 @@ slots:
 
 parts:
   fooyin-app:
-    plugin: cmake
-    source: https://github.com/fooyin/fooyin.git
-    source-tag: v$SNAPCRAFT_PROJECT_VERSION
-    build-packages:
-      - libtag1-dev
-      - libavfilter-dev
-      - libxkbcommon-dev
-      - libduktape207
-    cmake-parameters:
-      - -DCMAKE_INSTALL_PREFIX=/usr
+    plugin: dump
+    source: https://github.com/fooyin/fooyin/releases/download/v$SNAPCRAFT_PROJECT_VERSION/fooyin_$SNAPCRAFT_PROJECT_VERSION-noble_amd64.deb
     override-build: |
       craftctl default
       sed -i 's|Name=fooyin|Name=fooyin [Kyu]|' $CRAFT_PART_INSTALL/usr/share/applications/org.fooyin.fooyin.desktop
@@ -81,6 +73,8 @@ parts:
       - libzix-0-0
       - libasound2t64
       - libasound2-plugins
+      - libebur128-1
+      - libsdl2-2.0-0
     prime:
       - -usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libfftw3_omp.so*
       - -usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libfftw3_threads.so*
@@ -94,6 +88,9 @@ parts:
       - -usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libsphinxad.so*
       - -usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libwayland-client.so*
       - -usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libflite_cmu_indic_lang.so*
+      - -usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libdrm_amdgpu.so*
+      - -usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libdrm_intel.so*
+      - -usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libgallium*
 
   cleanup:
     after: [fooyin-app, base-dependencies]
