@@ -44,8 +44,16 @@ layout:
 
 parts:
   fooyin-app:
-    plugin: dump
-    source: https://github.com/fooyin/fooyin/releases/download/v$SNAPCRAFT_PROJECT_VERSION/fooyin_$SNAPCRAFT_PROJECT_VERSION-noble_amd64.deb
+    plugin: cmake
+    source: https://github.com/fooyin/fooyin.git
+    source-tag: v$SNAPCRAFT_PROJECT_VERSION
+    build-packages:
+      - libtag1-dev
+      - libavfilter-dev
+      - libxkbcommon-dev
+      - libduktape207
+    cmake-parameters:
+      - -DCMAKE_INSTALL_PREFIX=/usr
     override-build: |
       craftctl default
       sed -i 's|Name=fooyin|Name=fooyin [Kyu]|' $CRAFT_PART_INSTALL/usr/share/applications/org.fooyin.fooyin.desktop
