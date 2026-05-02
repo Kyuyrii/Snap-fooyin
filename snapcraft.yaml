@@ -1,6 +1,7 @@
 name: fooyin
 base: core24
 version: '0.10.4'
+adopt-info: fooyin-app
 platforms:
   amd64:
     build-on: [amd64]
@@ -8,11 +9,6 @@ platforms:
   arm64:
     build-on: [arm64]
     build-for: [arm64]
-summary: A customisable music player
-description: |
- fooyin is a music player built around customisation.
- It provides a variety of widgets to help you manage and play your local collection.
- It's highly extensible with a plugin system and includes FooScript, a scripting language for advanced configuration of widgets.
 grade: stable
 confinement: strict
 icon: org.fooyin.fooyin.svg
