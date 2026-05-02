@@ -1,6 +1,6 @@
 name: fooyin
 base: core24
-version: '0.10.3'
+version: '0.10.4'
 platforms:
   amd64:
     build-on: [amd64]
@@ -47,6 +47,7 @@ parts:
     plugin: cmake
     source: https://github.com/fooyin/fooyin.git
     source-tag: v$SNAPCRAFT_PROJECT_VERSION
+    parse-info: [dist/linux/org.fooyin.fooyin.metainfo.xml]
     build-packages:
       - libtag1-dev
       - libavfilter-dev
