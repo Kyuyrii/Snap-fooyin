@@ -1,7 +1,6 @@
 name: fooyin
 base: core24
 version: '0.10.5'
-adopt-info: fooyin-app
 platforms:
   amd64:
     build-on: [amd64]
@@ -9,6 +8,11 @@ platforms:
   arm64:
     build-on: [arm64]
     build-for: [arm64]
+summary: A customisable music player
+description: |
+ fooyin is a music player built around customisation.
+ It provides a variety of widgets to help you manage and play your local collection.
+ It's highly extensible with a plugin system and includes FooScript, a scripting language for advanced configuration of widgets.
 grade: stable
 confinement: strict
 icon: org.fooyin.fooyin.svg
@@ -40,17 +44,10 @@ layout:
 
 parts:
   fooyin-app:
-    plugin: cmake
-    source: https://github.com/fooyin/fooyin.git
-    source-tag: v$SNAPCRAFT_PROJECT_VERSION
-    parse-info: [dist/linux/org.fooyin.fooyin.metainfo.xml]
-    build-packages:
-      - libtag1-dev
-      - libavfilter-dev
-      - libxkbcommon-dev
-      - libduktape207
-    cmake-parameters:
-      - -DCMAKE_INSTALL_PREFIX=/usr
+    plugin: dump
+    source:
+      - on amd64: https://github.com/fooyin/fooyin/releases/download/v$SNAPCRAFT_PROJECT_VERSION/fooyin_$SNAPCRAFT_PROJECT_VERSION-noble_amd64.deb
+      - on arm64: https://github.com/fooyin/fooyin/releases/download/v$SNAPCRAFT_PROJECT_VERSION/fooyin_$SNAPCRAFT_PROJECT_VERSION-noble_arm64.deb
     override-build: |
       craftctl default
       sed -i 's|Name=fooyin|Name=fooyin [Kyu]|' $CRAFT_PART_INSTALL/usr/share/applications/org.fooyin.fooyin.desktop
