@@ -30,6 +30,7 @@ apps:
       - removable-media
       - mount-observe
       - udisks2
+      - optical-drive
     slots: [mpris]
 
 plugs:
@@ -39,6 +40,8 @@ plugs:
 layout:
   /usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/alsa-lib:
     symlink: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/alsa-lib
+  /usr/share/alsa:
+    symlink: $SNAP/usr/share/alsa
 
 parts:
   fooyin-app:
@@ -50,61 +53,34 @@ parts:
       craftctl default
       sed -i 's|Name=fooyin|Name=fooyin [Kyu]|' $CRAFT_PART_INSTALL/usr/share/applications/org.fooyin.fooyin.desktop
 
-  base-dependencies:
+  dependencies:
     after: [fooyin-app]
     plugin: nil
     stage-packages:
-      - libavfilter9
-      - libbs2b0
-      - liblilv-0-0
-      - libplacebo338
-      - libpocketsphinx3
-      - librubberband2
-      - libserd-0-0
-      - libsord-0-0
-      - libsphinxbase3t64
-      - libsratom-0-0
-      - libvidstab1.1
-      - libzimg2
-      - libzix-0-0
-      - libasound2t64
-      - libasound2-plugins
-      - libebur128-1
       - libsdl2-2.0-0
+      - libopusfile0
       - libsoundtouch1
       - libqcoro6core0t64
       - libqcoro6network0t64
-    prime:
-      - -usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libfftw3_omp.so*
-      - -usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libfftw3_threads.so*
-      - -usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libflite_cmu_grapheme_lang.so*
-      - -usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libflite_cmu_grapheme_lex.so*
-      - -usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libflite_cmu_indic_lex.so*
-      - -usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libflite_cmu_time_awb.so*
-      - -usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libjacknet.so*
-      - -usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libjackserver.so*
-      - -usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/liblcms2.so*
-      - -usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libsphinxad.so*
-      - -usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libwayland-client.so*
-      - -usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libflite_cmu_indic_lang.so*
-      - -usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libdrm_amdgpu.so*
-      - -usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libdrm_intel.so*
-      - -usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libgallium*
+      - libcdio19t64
+      - libcdio-cdda2t64
+      - libcdio-paranoia2t64
+      - libjack0
+      - libavfilter9
+      - libasound2t64
+      - libasound2-plugins
 
-  cleanup:
-    after: [fooyin-app, base-dependencies]
+  kf6-cleanup:
+    after: [dependencies]
     plugin: nil
+    source: https://github.com/canonical/gpu-snap.git
     build-snaps:
-      - mesa-2404
-      - kf6-core24
+    - kf6-core24
+    - gtk-common-themes
     override-prime: |
+      craftctl default
+      ${CRAFT_PART_SRC}/bin/gpu-2404-cleanup mesa-2404
       set -eux
-      cd /snap/mesa-2404/current/usr/lib
-      find . -type f,l -exec rm -f $CRAFT_PRIME/usr/lib/{} \;
-      cd /snap/mesa-2404/current/usr/share
-      find . -type f,l -exec rm -f $CRAFT_PRIME/usr/share/{} \;
-
-      cd /snap/kf6-core24/current/usr/lib
-      find . -type f,l -exec rm -f $CRAFT_PRIME/usr/lib/{} \;
-      cd /snap/kf6-core24/current/usr/share
-      find . -type f,l -exec rm -f $CRAFT_PRIME/usr/share/{} \;
+      for snap in "kf6-core24" "gtk-common-themes"; do
+          cd "/snap/$snap/current" && find . -type f,l \( -name "*.so.*" -o -name "*.so" \) -exec rm -f "$CRAFT_PRIME/{}" \;
+      done
